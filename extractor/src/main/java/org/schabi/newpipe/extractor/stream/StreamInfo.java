@@ -10,11 +10,11 @@ import org.schabi.newpipe.extractor.utils.ExtractorHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty;
 
@@ -334,6 +334,11 @@ public class StreamInfo extends Info {
         } catch (Exception e) {
             streamInfo.addError(e);
         }
+        try {
+            streamInfo.setFrameSets(extractor.getFrames());
+        } catch (Exception e) {
+            streamInfo.addError(e);
+        }
 
         streamInfo.setRelatedStreams(ExtractorHelper.getRelatedVideosOrLogError(streamInfo, extractor));
 
@@ -385,6 +390,8 @@ public class StreamInfo extends Info {
     private List<String> tags = new ArrayList<>();
     private List<StreamSegment> streamSegments = new ArrayList<>();
     private List<MetaInfo> metaInfo = new ArrayList<>();
+
+    private List<Frameset> framesets = new ArrayList<>();
 
     /**
      * Get the stream type
@@ -698,5 +705,14 @@ public class StreamInfo extends Info {
     @Nonnull
     public List<MetaInfo> getMetaInfo() {
         return this.metaInfo;
+    }
+
+    public void setFrameSets(final List<Frameset> framesets) {
+        this.framesets = framesets;
+    }
+
+    @Nullable
+    public List<Frameset> getFramesets() {
+        return this.framesets;
     }
 }
